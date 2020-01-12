@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.logging.*;
 import com.splunk.logging.*;
 
+import com.sun.net.httpserver.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
+import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -52,14 +54,14 @@ public class UserController {
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
-		logger.info("User name set with", createUserRequest.getUsername());
+		logger.info("User name set with " + createUserRequest.getUsername());
 		Cart cart = new Cart();
 		cartRepository.save(cart);
 		user.setCart(cart);
 
 		if(createUserRequest.getPassword().length() < 7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
-			splunkLogger.error("Error with user password. Cannot create user {}", createUserRequest.getUsername());
+			logger.info("Error with user password. Cannot create user " + createUserRequest.getUsername());
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));

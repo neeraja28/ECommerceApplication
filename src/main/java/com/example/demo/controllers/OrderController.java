@@ -7,6 +7,7 @@ import com.splunk.logging.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
+import org.springframework.web.client.HttpServerErrorException;
 
 @RestController
 @RequestMapping("/api/order")
@@ -38,7 +40,7 @@ public class OrderController {
 	public ResponseEntity<UserOrder> submit(@PathVariable String username) {
 		User user = userRepository.findByUsername(username);
 		if(user == null) {
-			splunkLogger.error("Cannot create order for null user");
+			logger.info("Cannot create order for the user: "  + username );
 			return ResponseEntity.notFound().build();
 		}
 		UserOrder order = UserOrder.createFromCart(user.getCart());
@@ -51,7 +53,7 @@ public class OrderController {
 	public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
 		User user = userRepository.findByUsername(username);
 		if(user == null) {
-			splunkLogger.error("Cannot find order history for null user");
+			logger.info("Cannot find order history for null user");
 			return ResponseEntity.notFound().build();
 		}
 		logger.info("Got the order history for user: " + username);
