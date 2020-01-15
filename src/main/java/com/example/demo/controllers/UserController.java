@@ -2,7 +2,6 @@ package com.example.demo.controllers;
 
 import java.util.Optional;
 import java.util.logging.*;
-import com.splunk.logging.*;
 
 import com.sun.net.httpserver.HttpServer;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ import org.springframework.web.client.HttpServerErrorException;
 @RequestMapping("/api/user")
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	Logger splunkLogger = LoggerFactory.getLogger("splunk.logger");
+
 	@Autowired
 	private UserRepository userRepository;
 	
