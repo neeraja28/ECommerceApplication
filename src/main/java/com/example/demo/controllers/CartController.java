@@ -3,7 +3,6 @@ package com.example.demo.controllers;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.logging.*;
-import com.splunk.logging.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,6 @@ import com.example.demo.model.requests.ModifyCartRequest;
 @RequestMapping("/api/cart")
 public class CartController {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserController.class);
-	Logger splunkLogger = LoggerFactory.getLogger("splunk.logger");
 	
 	@Autowired
 	private UserRepository userRepository;
